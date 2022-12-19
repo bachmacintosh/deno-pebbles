@@ -14,8 +14,8 @@ deno task open-when-live <twitch-streamer-login-or-id> <interval-minutes = 5>
 ```
 
 After the first run, a `.twitch.json` file will be created in the project root. Update it with your Twitch App's client
-ID and secret. Run the program again, and it will open the stream once they go live, checking every 5 minutes by
-default.
+ID and secret. The `accessToken` and the `tokenExpires` date will be updated automatically as needed. Run the program
+again, and it will open the stream once they go live, checking every 5 minutes by default.
 
 ## Permissions
 
