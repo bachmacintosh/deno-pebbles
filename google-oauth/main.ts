@@ -5,6 +5,11 @@ import getAccessToken from "./functions/google/getAccessToken.ts";
 import listenForAuthorizationCode from "./functions/http/listenForAuthorizationCode.ts";
 import openAuthorizationWindow from "./functions/util/openAuthorizationWindow.ts";
 
+const SCOPES = [
+	"https://www.googleapis.com/auth/spreadsheets.readonly",
+	"https://www.googleapis.com/auth/youtube.readonly",
+];
+
 const VERSION = "1.0.0";
 
 const args = Deno.args;
@@ -49,7 +54,7 @@ async function continueIfFileExists(): Promise<void> {
 	const gitHubText = await Deno.readTextFile(GITHUB_CONFIG_FILE_PATH);
 	const gitHubJson = JSON.parse(gitHubText) as GitHubCredentialsJson;
 	console.info("Opening the browser to authorize the app...");
-	openAuthorizationWindow(googleJson, STATE);
+	openAuthorizationWindow(googleJson, SCOPES, STATE);
 	console.info("Waiting for response from authorization screen...");
 	const code = await listenForAuthorizationCode(STATE);
 	console.info("Fetching Access and Refresh Token from Google...");

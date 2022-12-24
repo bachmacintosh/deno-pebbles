@@ -1,11 +1,11 @@
 import type { GoogleCredentialsJson } from "../../types.ts";
 import { open } from "../../deps.ts";
 
-export default function openAuthorizationWindow(googleJson: GoogleCredentialsJson, state: string): void {
-	const scopes = [
-		"https://www.googleapis.com/auth/spreadsheets.readonly",
-		"https://www.googleapis.com/auth/youtube.readonly",
-	];
+export default function openAuthorizationWindow(
+	googleJson: GoogleCredentialsJson,
+	scopes: string[],
+	state: string,
+): void {
 	const url = [
 		"https://accounts.google.com/o/oauth2/v2/auth",
 		`?client_id=${encodeURIComponent(googleJson.web.client_id)}`,
