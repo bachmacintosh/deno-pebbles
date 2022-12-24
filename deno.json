@@ -32,7 +32,7 @@
 		}
 	},
 	"tasks": {
-		"google-oauth": "deno run --lock=deno.lock --allow-read=./ --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,accounts.google.com,oauth2.googleapis.com ./google-oauth/main.ts",
+		"google-oauth": "deno run --lock=deno.lock --allow-read=./ --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,accounts.google.com,api.github.com,oauth2.googleapis.com ./google-oauth/main.ts",
 		"open-when-live": "deno run --lock=deno.lock --allow-read=./ --allow-write=./.twitch.json --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,id.twitch.tv,api.twitch.tv ./open-when-live/main.ts"
 	}
 }

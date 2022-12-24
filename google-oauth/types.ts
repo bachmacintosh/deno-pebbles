@@ -1,3 +1,14 @@
+export interface GitHubCredentialsJson {
+	owner: string;
+	repo: string;
+	accessToken: string;
+}
+
+export interface GitHubPublicKeyJson {
+	"key_id": string;
+	key: string;
+}
+
 export interface GoogleCredentialsJson {
 	web: {
 		"client_id": string;
@@ -8,4 +19,12 @@ export interface GoogleCredentialsJson {
 		"client_secret": string;
 		"redirect_uris": string[];
 	};
+}
+
+export interface GoogleAccessTokenJson {
+	"access_token": string;
+	"expires_in": number;
+	"refresh_token"?: string;
+	scope: string;
+	"token_type": "Bearer";
 }
