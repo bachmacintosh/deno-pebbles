@@ -1,4 +1,4 @@
-name: Tests (PR)
+name: Tests
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
       - main
 jobs:
   test:
-    name: Test
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
