@@ -1,6 +1,8 @@
 {
 	"deno.enable": true,
 	"deno.config": "./deno.json",
+	"deno.inlayHints.parameterTypes.enabled": false,
+	"deno.inlayHints.parameterNames.enabled": "literals",
 	"prettier.enable": false,
 	"editor.defaultFormatter": "denoland.vscode-deno"
 }
