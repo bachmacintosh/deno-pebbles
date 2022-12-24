@@ -1,0 +1,20 @@
+name: Tests (PR)
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    name: Test Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set Up Deno
+        uses: denoland/setup-deno@v1.1.1
+        with:
+          deno-version: v1.x
+      - name: Lint
+        run: deno lint
+      - name: Check Formatting
+        run: deno fmt --check
