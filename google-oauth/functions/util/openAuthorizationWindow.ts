@@ -1,0 +1,25 @@
+import type { GoogleCredentialsJson } from "../../types.ts";
+import { open } from "../../deps.ts";
+
+export default function openAuthorizationWindow(googleJson: GoogleCredentialsJson, state: string): void {
+	const scopes = [
+		"https://www.googleapis.com/auth/spreadsheets.readonly",
+		"https://www.googleapis.com/auth/youtube.readonly",
+	];
+	const url = [
+		"https://accounts.google.com/o/oauth2/v2/auth",
+		`?client_id=${encodeURIComponent(googleJson.web.client_id)}`,
+		`&redirect_uri=${encodeURIComponent(googleJson.web.redirect_uris[0])}`,
+		`&scope=${encodeURIComponent(scopes.join(" "))}`,
+		`&state=${state}`,
+		"&response_type=code",
+		"&access_type=offline",
+		"&include_granted_scopes=true",
+		"&prompt=consent",
+	].join("");
+	try {
+		open(url);
+	} catch (_error) {
+		console.info(`If your browser did not open, go to this URL to authorize with Google: ${url}`);
+	}
+}
