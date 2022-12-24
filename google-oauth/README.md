@@ -19,15 +19,15 @@ Store your Google OAuth2 client credentials as `.google.json` in the project roo
 
 ```json
 {
-	"web": {
-		"client_id": "your-client-id.apps.googleusercontent.com",
-		"project_id": "your-project-id",
-		"auth_uri": "https://accounts.google.com/o/oauth2/auth",
-		"token_uri": "https://oauth2.googleapis.com/token",
-		"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-		"client_secret": "your-client-secret",
-		"redirect_uris": ["http://localhost:3000"]
-	}
+  "web": {
+    "client_id": "your-client-id.apps.googleusercontent.com",
+    "project_id": "your-project-id",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "your-client-secret",
+    "redirect_uris": ["http://localhost:3000"]
+  }
 }
 ```
 
@@ -36,9 +36,9 @@ project root; it should look similar to this:
 
 ```json
 {
-	"accessToken": "github_pat_abc123...",
-	"owner": "bachmacintosh",
-	"repo": "deno-pebbles"
+  "accessToken": "github_pat_abc123...",
+  "owner": "bachmacintosh",
+  "repo": "deno-pebbles"
 }
 ```
 
@@ -48,8 +48,8 @@ APIs, update the `SCOPES` variable in `main.ts` with your desired scopes
 
 ```typescript
 const SCOPES = [
-	"https://www.googleapis.com/auth/spreadsheets.readonly",
-	"https://www.googleapis.com/auth/youtube.readonly",
+  "https://www.googleapis.com/auth/spreadsheets.readonly",
+  "https://www.googleapis.com/auth/youtube.readonly",
 ];
 ```
 

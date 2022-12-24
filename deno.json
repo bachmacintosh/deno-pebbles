@@ -1,38 +1,38 @@
 {
-	"$schema": "https://deno.land/x/deno@v1.29.1/cli/schemas/config-file.v1.json",
-	"lint": {
-		"rules": {
-			"tags": ["recommended"],
-			"include": [
-				"ban-untagged-todo",
-				"camelcase",
-				"default-param-last",
-				"explicit-function-return-type",
-				"explicit-module-boundary-types",
-				"no-const-assign",
-				"no-eval",
-				"no-external-import",
-				"no-implicit-declare-namespace-export",
-				"no-non-null-asserted-optional-chain",
-				"no-non-null-assertion",
-				"no-sparse-arrays",
-				"no-throw-literal",
-				"no-undef",
-				"single-var-declarator",
-				"triple-slash-reference"
-			]
-		}
-	},
-	"fmt": {
-		"options": {
-			"useTabs": true,
-			"lineWidth": 120,
-			"singleQuote": false,
-			"proseWrap": "always"
-		}
-	},
-	"tasks": {
-		"google-oauth": "deno run --lock=deno.lock --allow-read=./ --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,accounts.google.com,api.github.com,oauth2.googleapis.com ./google-oauth/main.ts",
-		"open-when-live": "deno run --lock=deno.lock --allow-read=./ --allow-write=./.twitch.json --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,id.twitch.tv,api.twitch.tv ./open-when-live/main.ts"
-	}
+  "$schema": "https://deno.land/x/deno@v1.29.1/cli/schemas/config-file.v1.json",
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": [
+        "ban-untagged-todo",
+        "camelcase",
+        "default-param-last",
+        "explicit-function-return-type",
+        "explicit-module-boundary-types",
+        "no-const-assign",
+        "no-eval",
+        "no-external-import",
+        "no-implicit-declare-namespace-export",
+        "no-non-null-asserted-optional-chain",
+        "no-non-null-assertion",
+        "no-sparse-arrays",
+        "no-throw-literal",
+        "no-undef",
+        "single-var-declarator",
+        "triple-slash-reference"
+      ]
+    }
+  },
+  "fmt": {
+    "options": {
+      "useTabs": false,
+      "lineWidth": 120,
+      "singleQuote": false,
+      "proseWrap": "always"
+    }
+  },
+  "tasks": {
+    "google-oauth": "deno run --lock=deno.lock --allow-read=./ --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,accounts.google.com,api.github.com,oauth2.googleapis.com ./google-oauth/main.ts",
+    "open-when-live": "deno run --lock=deno.lock --allow-read=./ --allow-write=./.twitch.json --allow-run=open,cmd,xdg-open --allow-net=0.0.0.0:3000,id.twitch.tv,api.twitch.tv ./open-when-live/main.ts"
+  }
 }
