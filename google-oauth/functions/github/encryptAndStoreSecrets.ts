@@ -1,8 +1,4 @@
-import type {
-  GitHubCredentialsJson,
-  GoogleAccessTokenJson,
-  GoogleCredentialsJson,
-} from "../../types.ts";
+import type { GitHubCredentialsJson, GoogleAccessTokenJson, GoogleCredentialsJson } from "../../types.ts";
 import getRepoPublicKey from "./getRepoPublicKey.ts";
 import { sodium } from "../../deps.ts";
 
@@ -26,8 +22,7 @@ export default async function encryptAndStoreRefreshToken(
       const binItem = sodium.from_string(value);
       const encryptedBytes = sodium.crypto_box_seal(binItem, binKey);
       const encryptedString = sodium.to_base64(encryptedBytes, 1);
-      const url =
-        `https://api.github.com/repos/${gitHubJson.owner}/${gitHubJson.repo}/actions/secrets/${key}`;
+      const url = `https://api.github.com/repos/${gitHubJson.owner}/${gitHubJson.repo}/actions/secrets/${key}`;
 
       const init: RequestInit = {
         method: "PUT",

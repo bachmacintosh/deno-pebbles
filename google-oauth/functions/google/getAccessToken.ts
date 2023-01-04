@@ -1,7 +1,4 @@
-import type {
-  GoogleAccessTokenJson,
-  GoogleCredentialsJson,
-} from "../../types.ts";
+import type { GoogleAccessTokenJson, GoogleCredentialsJson } from "../../types.ts";
 
 export default async function getAccessToken(
   googleJson: GoogleCredentialsJson,
