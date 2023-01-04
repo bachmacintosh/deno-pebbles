@@ -1,4 +1,7 @@
-import type { GoogleAccessTokenJson, GoogleCredentialsJson } from "../../types.ts";
+import type {
+  GoogleAccessTokenJson,
+  GoogleCredentialsJson,
+} from "../../types.ts";
 
 export default async function getAccessToken(
   googleJson: GoogleCredentialsJson,
@@ -26,6 +29,9 @@ export default async function getAccessToken(
     }
     return json;
   } else {
-    throw new Error(`Error getting Access Token - ${response.status}`);
+    const text = await response.text();
+    throw new Error(
+      `Error getting Access Token - ${response.status} - ${text}`,
+    );
   }
 }

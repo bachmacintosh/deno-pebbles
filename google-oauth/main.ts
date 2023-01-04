@@ -1,11 +1,12 @@
 import type { GitHubCredentialsJson, GoogleCredentialsJson } from "./types.ts";
 import { join } from "./deps.ts";
-import encryptAndStoreRefreshToken from "./functions/github/encryptAndStoreRefreshToken.ts";
+import encryptAndStoreSecrets from "./functions/github/encryptAndStoreSecrets.ts";
 import getAccessToken from "./functions/google/getAccessToken.ts";
 import listenForAuthorizationCode from "./functions/http/listenForAuthorizationCode.ts";
 import openAuthorizationWindow from "./functions/util/openAuthorizationWindow.ts";
 
 const SCOPES = [
+  "https://www.googleapis.com/auth/userinfo.email",
   "https://www.googleapis.com/auth/spreadsheets.readonly",
   "https://www.googleapis.com/auth/youtube.readonly",
 ];
@@ -59,7 +60,8 @@ async function continueIfFileExists(): Promise<void> {
   const code = await listenForAuthorizationCode(STATE);
   console.info("Fetching Access and Refresh Token from Google...");
   const accessTokenJson = await getAccessToken(googleJson, code);
-  console.info("Encrypting and Setting GitHub Actions Secret...");
-  await encryptAndStoreRefreshToken(gitHubJson, accessTokenJson);
+  console.log(`Refresh Token ${accessTokenJson.refresh_token}`);
+  console.info("Encrypting and Setting GitHub Actions Secrets...");
+  await encryptAndStoreSecrets(gitHubJson, googleJson, accessTokenJson);
   console.info("Success!");
 }
