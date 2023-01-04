@@ -26,6 +26,9 @@ export default async function getAccessToken(
     }
     return json;
   } else {
-    throw new Error(`Error getting Access Token - ${response.status}`);
+    const text = await response.text();
+    throw new Error(
+      `Error getting Access Token - ${response.status} - ${text}`,
+    );
   }
 }
