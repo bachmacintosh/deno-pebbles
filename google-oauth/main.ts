@@ -60,7 +60,6 @@ async function continueIfFileExists(): Promise<void> {
   const code = await listenForAuthorizationCode(STATE);
   console.info("Fetching Access and Refresh Token from Google...");
   const accessTokenJson = await getAccessToken(googleJson, code);
-  console.log(`Refresh Token ${accessTokenJson.refresh_token}`);
   console.info("Encrypting and Setting GitHub Actions Secrets...");
   await encryptAndStoreSecrets(gitHubJson, googleJson, accessTokenJson);
   console.info("Success!");
