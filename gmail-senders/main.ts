@@ -30,7 +30,18 @@ if (args.length > 0 && args[0] === "go") {
 }
 
 function showHelp(): void {
+  const permissions = {
+    read: "./",
+    write: "./senders.txt",
+    run: "open,cmd,xdg-open",
+    net: "0.0.0.0:3000,accounts.google.com,gmail.googleapis.com,oauth2.googleapis.com",
+  };
   console.info(`gmail-senders v${VERSION}`);
+  console.info(
+    "Usage: gmail-senders go",
+  );
+  console.info("Permissions:");
+  console.table(permissions);
 }
 
 async function checkConfigFileExists(): Promise<void> {

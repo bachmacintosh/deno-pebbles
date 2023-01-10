@@ -30,7 +30,17 @@ if (args.length > 0 && args[0] === "go") {
 }
 
 function showHelp(): void {
+  const permissions = {
+    read: "./",
+    run: "open,cmd,xdg-open",
+    net: "0.0.0.0:3000,accounts.google.com,api.github.com,oauth2.googleapis.com",
+  };
   console.info(`google-oauth v${VERSION}`);
+  console.info(
+    "Usage: google-oauth go",
+  );
+  console.info("Permissions:");
+  console.table(permissions);
 }
 
 async function checkConfigFileExists(): Promise<void> {
