@@ -2,3 +2,5 @@
 .DS_Store
 .google.json
 .github.json
+.gmail.json
+senders.txt
