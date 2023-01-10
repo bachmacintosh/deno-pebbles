@@ -36,7 +36,9 @@ deno task <program-name> -h
 
 See their subfolders for additional info.
 
-- [open-when-live](https://github.com/bachmacintosh/deno-pebbles/blob/main/open-when-live) - A program that opens a
-  Twitch stream in your default browser once a given streamer is live.
+- [gmail-senders](https://github.com/bachmacintosh/deno-pebbles/blob/main/gmail-senders) - A program that exports a
+  GMail user's unique list of senders across all non-unwanted emails
 - [google-oauth](https://github.com/bachmacintosh/deno-pebbles/blob/main/google-oauth) - A program that gets a Refresh
   Token from Google, and stores it in a GitHub Repo's secrets
+- [open-when-live](https://github.com/bachmacintosh/deno-pebbles/blob/main/open-when-live) - A program that opens a
+  Twitch stream in your default browser once a given streamer is live.
