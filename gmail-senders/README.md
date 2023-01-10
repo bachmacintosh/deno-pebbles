@@ -1,20 +1,22 @@
 # gmail-senders
 
-This program will go through all emails in a GMail account (except Trash and Spam), and export a unique list of senders'
-email addresses. Useful for those who want to start moving accounts to new email addresses.
+This program will go through all emails in a GMail account (except Trash and
+Spam), and export a unique list of senders' email addresses. Useful for those
+who want to start moving accounts to new email addresses.
 
 ## Prerequisites
 
 You will need:
 
-- [A Google OAuth2 Client](https://developers.google.com/identity/protocols/oauth2/web-server) with
-  `http://localhost:3000` as one of the allowed redirect URIs, and have the
-  [gmail.readonly scope](https://developers.google.com/identity/protocols/oauth2/scopes) specified in the OAuth Consent
-  Screen settings.
+- [A Google OAuth2 Client](https://developers.google.com/identity/protocols/oauth2/web-server)
+  with `http://localhost:3000` as one of the allowed redirect URIs, and have the
+  [gmail.readonly scope](https://developers.google.com/identity/protocols/oauth2/scopes)
+  specified in the OAuth Consent Screen settings.
 
 ## Usage
 
-Store your Google OAuth2 client credentials as `.google.json` in the project root. It should look similar to this:
+Store your Google OAuth2 client credentials as `.gmail.json` in the project
+root. It should look similar to this:
 
 ```json
 {
@@ -36,8 +38,8 @@ From the root of this project, run:
 deno task gmail-senders go
 ```
 
-When the program runs, your default browser will open a new tab. Sign into Google if not already, otherwise select your
-account and authorize the app.
+When the program runs, your default browser will open a new tab. Sign into
+Google if not already, otherwise select your account and authorize the app.
 
 ## Permissions
 
