@@ -42,3 +42,4 @@ See their subfolders for additional info.
   Token from Google, and stores it in a GitHub Repo's secrets
 - [open-when-live](https://github.com/bachmacintosh/deno-pebbles/blob/main/open-when-live) - A program that opens a
   Twitch stream in your default browser once a given streamer is live.
+- update - Used to update the project's `deno.lock` file for dependencies.
