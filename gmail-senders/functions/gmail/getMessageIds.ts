@@ -1,4 +1,4 @@
-import { GMailMessageList } from "../../types.ts";
+import type { GMailMessageList } from "../../../types.ts";
 
 export async function getMessageIds(accessToken: string): Promise<string[]> {
   let moreMessages = true;

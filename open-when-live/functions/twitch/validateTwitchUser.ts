@@ -1,7 +1,7 @@
-import type { ConfigJson, TwitchApiError, TwitchUserJson } from "../../types.ts";
+import type { TwitchApiError, TwitchConfigJson, TwitchUserJson } from "../../../types.ts";
 
 export default async function validateTwitchUser(
-  config: ConfigJson,
+  config: TwitchConfigJson,
   user: string | number,
 ): Promise<string> {
   let url = "https://api.twitch.tv/helix/users";

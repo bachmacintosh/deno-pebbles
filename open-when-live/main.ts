@@ -1,5 +1,5 @@
-import { join, open } from "./deps.ts";
-import type { ConfigJson } from "./types.ts";
+import { join, open } from "../deps.ts";
+import type { TwitchConfigJson } from "../types.ts";
 import reviveJson from "./functions/util/reviveJson.ts";
 import streamIsLive from "./functions/twitch/streamIsLive.ts";
 import validateAccessToken from "./functions/twitch/validateAccessToken.ts";
@@ -10,7 +10,10 @@ const CONFIG_FILE_PATH = join(Deno.cwd(), ".twitch.json");
 
 const args = Deno.args;
 
-if (args.length === 0 || args[0] === "--help" || args[0] === "-h" || args[0] === "--h") {
+if (
+  args.length === 0 || args[0] === "--help" || args[0] === "-h" ||
+  args[0] === "--h"
+) {
   showHelp();
 }
 
@@ -69,7 +72,7 @@ async function checkConfigFileExists(): Promise<void> {
 
 async function continueIfFileExists(): Promise<void> {
   const configText = await Deno.readTextFile(CONFIG_FILE_PATH);
-  const configJson = JSON.parse(configText, reviveJson) as ConfigJson;
+  const configJson = JSON.parse(configText, reviveJson) as TwitchConfigJson;
   if (configJson.clientId === "" || configJson.clientSecret === "") {
     throw new Error(
       "You must provide the cliendId and clientSecret of your Twitch App for this program to work.",
@@ -105,7 +108,7 @@ async function continueIfFileExists(): Promise<void> {
 }
 
 async function createFileAndExit(): Promise<void> {
-  const defaultJson: ConfigJson = {
+  const defaultJson: TwitchConfigJson = {
     clientId: "",
     clientSecret: "",
     accessToken: "",

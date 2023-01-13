@@ -1,7 +1,7 @@
-import type { ConfigJson, TwitchApiError, TwitchStreamJson } from "../../types.ts";
+import type { TwitchApiError, TwitchConfigJson, TwitchStreamJson } from "../../../types.ts";
 
 export default async function streamIsLive(
-  config: ConfigJson,
+  config: TwitchConfigJson,
   user: string | number,
   intervalMinutes: number,
 ): Promise<void> {

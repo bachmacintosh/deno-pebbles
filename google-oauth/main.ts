@@ -1,5 +1,5 @@
-import type { GitHubCredentialsJson, GoogleCredentialsJson } from "./types.ts";
-import { join } from "./deps.ts";
+import type { GitHubCredentialsJson, GoogleCredentialsJson } from "../types.ts";
+import { join } from "../deps.ts";
 import encryptAndStoreSecrets from "./functions/github/encryptAndStoreSecrets.ts";
 import getAccessToken from "./functions/google/getAccessToken.ts";
 import listenForAuthorizationCode from "./functions/http/listenForAuthorizationCode.ts";

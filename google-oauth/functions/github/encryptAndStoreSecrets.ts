@@ -1,6 +1,6 @@
-import type { GitHubCredentialsJson, GoogleAccessTokenJson, GoogleCredentialsJson } from "../../types.ts";
+import type { GitHubCredentialsJson, GoogleAccessTokenJson, GoogleCredentialsJson } from "../../../types.ts";
 import getRepoPublicKey from "./getRepoPublicKey.ts";
-import { sodium } from "../../deps.ts";
+import { sodium } from "../../../deps.ts";
 
 export default async function encryptAndStoreRefreshToken(
   gitHubJson: GitHubCredentialsJson,

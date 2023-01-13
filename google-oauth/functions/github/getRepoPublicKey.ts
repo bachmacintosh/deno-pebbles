@@ -1,6 +1,8 @@
-import type { GitHubCredentialsJson, GitHubPublicKeyJson } from "../../types.ts";
+import type { GitHubCredentialsJson, GitHubPublicKeyJson } from "../../../types.ts";
 
-export default async function getRepoPublicKey(gitHubJson: GitHubCredentialsJson): Promise<GitHubPublicKeyJson> {
+export default async function getRepoPublicKey(
+  gitHubJson: GitHubCredentialsJson,
+): Promise<GitHubPublicKeyJson> {
   const url = `https://api.github.com/repos/${gitHubJson.owner}/${gitHubJson.repo}/actions/secrets/public-key`;
   const init: RequestInit = {
     headers: new Headers({

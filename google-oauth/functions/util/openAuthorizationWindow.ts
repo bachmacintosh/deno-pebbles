@@ -1,5 +1,5 @@
-import type { GoogleCredentialsJson } from "../../types.ts";
-import { open } from "../../deps.ts";
+import type { GoogleCredentialsJson } from "../../../types.ts";
+import { open } from "../../../deps.ts";
 
 export default function openAuthorizationWindow(
   googleJson: GoogleCredentialsJson,
@@ -20,6 +20,8 @@ export default function openAuthorizationWindow(
   try {
     open(url);
   } catch (_error) {
-    console.info(`If your browser did not open, go to this URL to authorize with Google: ${url}`);
+    console.info(
+      `If your browser did not open, go to this URL to authorize with Google: ${url}`,
+    );
   }
 }
