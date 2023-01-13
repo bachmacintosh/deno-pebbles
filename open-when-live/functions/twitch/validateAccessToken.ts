@@ -1,7 +1,9 @@
-import type { ConfigJson, TwitchAccessTokenValidateJson, TwitchApiError } from "../../types.ts";
+import type { TwitchAccessTokenValidateJson, TwitchApiError, TwitchConfigJson } from "../../../types.ts";
 import refreshAccessToken from "./refreshAccessToken.ts";
 
-export default async function validateAccessToken(config: ConfigJson): Promise<void> {
+export default async function validateAccessToken(
+  config: TwitchConfigJson,
+): Promise<void> {
   const tokenExpiry = config.tokenExpires.getTime() - new Date().getTime();
   if (config.accessToken === "") {
     console.info("INFO: Access Token is missing. Getting a new one...");

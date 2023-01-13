@@ -1,6 +1,8 @@
-import type { ConfigJson, TwitchAccessTokenGrantJson, TwitchApiError } from "../../types.ts";
+import type { TwitchAccessTokenGrantJson, TwitchApiError, TwitchConfigJson } from "../../../types.ts";
 
-export default async function refreshAccessToken(config: ConfigJson): Promise<void> {
+export default async function refreshAccessToken(
+  config: TwitchConfigJson,
+): Promise<void> {
   const url = "https://id.twitch.tv/oauth2/token";
   const init: RequestInit = {
     method: "POST",

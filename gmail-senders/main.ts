@@ -1,5 +1,5 @@
-import type { GoogleCredentialsJson } from "./types.ts";
-import { join } from "./deps.ts";
+import type { GoogleCredentialsJson } from "../types.ts";
+import { join } from "../deps.ts";
 import getAccessToken from "./functions/google/getAccessToken.ts";
 import listenForAuthorizationCode from "./functions/http/listenForAuthorizationCode.ts";
 import openAuthorizationWindow from "./functions/util/openAuthorizationWindow.ts";

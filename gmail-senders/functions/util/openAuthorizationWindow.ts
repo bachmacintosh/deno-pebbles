@@ -1,5 +1,5 @@
-import type { GoogleCredentialsJson } from "../../types.ts";
-import { open } from "../../deps.ts";
+import type { GoogleCredentialsJson } from "../../../types.ts";
+import { open } from "../../../deps.ts";
 
 export default function openAuthorizationWindow(
   googleJson: GoogleCredentialsJson,

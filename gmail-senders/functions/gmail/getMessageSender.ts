@@ -1,4 +1,4 @@
-import { GMailMessageMetadata } from "../../types.ts";
+import type { GMailMessageMetadata } from "../../../types.ts";
 
 export async function getMessageSender(
   accessToken: string,
