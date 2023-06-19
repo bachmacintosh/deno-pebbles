@@ -1,5 +1,8 @@
 {
-  "$schema": "https://deno.land/x/deno@v1.29.1/cli/schemas/config-file.v1.json",
+  "$schema": "https://deno.land/x/deno@v1.32.3/cli/schemas/config-file.v1.json",
+  "imports": {
+    "std/": "https://deno.land/std@0.174.0/"
+  },
   "lint": {
     "rules": {
       "tags": ["recommended"],
@@ -25,6 +28,7 @@
   },
   "fmt": {
     "options": {
+      "semiColons": true,
       "useTabs": false,
       "lineWidth": 120,
       "singleQuote": false,
