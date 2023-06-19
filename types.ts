@@ -141,11 +141,11 @@ interface TwitchEventSubBaseMetadata<M extends TwitchEventSubMessageType> {
 
 export interface TwitchEventSubMessage<
   M extends TwitchEventSubMessageType,
-  S extends TwitchEventSubSubscriptionType,
+  S extends TwitchEventSubSubscriptionType | undefined = undefined,
 > {
   metadata: M extends (
     | "notification"
-    | "revokation"
+    | "revocation"
   ) ? TwitchEventSubSubsciptionMetadata<M, S>
     : TwitchEventSubBaseMetadata<M>;
   payload: TwitchEventSubPayload<M, S>[M];
@@ -160,34 +160,38 @@ type TwitchEventSubMessageType =
 
 interface TwitchEventSubPayload<
   M extends TwitchEventSubMessageType,
-  S extends TwitchEventSubSubscriptionType,
+  S extends TwitchEventSubSubscriptionType | undefined = undefined,
 > {
-  session_welcome: {
-    session: {
-      id: string;
-      status: "connected";
-      keepalive_timeout_seconds: number;
-      reconnect_url: null;
-      connected_at: string;
-    };
-  };
-  session_keepalive: Record<string, never>;
-  notification: {
-    subscription: TwitchEventSubSubsctiption<M, S>;
-    event: TwitchEventSubSubscriptionEvent[S];
-  };
-  session_reconnect: {
-    session: {
-      id: string;
-      status: "reconnecting";
-      keepalive_timeout_seconds: null;
-      reconnect_url: string;
-      connected_at: string;
-    };
-  };
-  revocation: {
-    subscription: TwitchEventSubSubsctiption<M, S>;
-  };
+  session_welcome: S extends undefined ? {
+      session: {
+        id: string;
+        status: "connected";
+        keepalive_timeout_seconds: number;
+        reconnect_url: null;
+        connected_at: string;
+      };
+    }
+    : never;
+  session_keepalive: S extends undefined ? Record<string, never> : never;
+  notification: S extends TwitchEventSubSubscriptionType ? {
+      subscription: TwitchEventSubSubsctiption<M, S>;
+      event: TwitchEventSubSubscriptionEvent[S];
+    }
+    : never;
+  session_reconnect: S extends undefined ? {
+      session: {
+        id: string;
+        status: "reconnecting";
+        keepalive_timeout_seconds: null;
+        reconnect_url: string;
+        connected_at: string;
+      };
+    }
+    : never;
+  revocation: S extends TwitchEventSubSubscriptionType ? {
+      subscription: TwitchEventSubSubsctiption<M, S>;
+    }
+    : never;
 }
 
 interface TwitchEventSubSubsctiption<
@@ -195,7 +199,7 @@ interface TwitchEventSubSubsctiption<
   S extends TwitchEventSubSubscriptionType,
 > {
   "id": string;
-  status: M extends "revokation"
+  status: M extends "revocation"
     ? "authorization_revoked" | "user_removed" | "version_removed"
     : "enabled";
   type: S;
@@ -226,12 +230,30 @@ interface TwitchEventSubSubscriptionEvent {
   };
 }
 
-interface TwitchEventSubSubsciptionMetadata<
+type TwitchEventSubSubsciptionMetadata<
   M extends TwitchEventSubMessageType,
-  S extends TwitchEventSubSubscriptionType,
-> extends TwitchEventSubBaseMetadata<M> {
-  subscription_type: S;
-  subscription_version: string;
-}
+  S extends TwitchEventSubSubscriptionType | undefined = undefined,
+> = S extends TwitchEventSubSubscriptionType ? TwitchEventSubBaseMetadata<M> & {
+    subscription_type: S;
+    subscription_version: string;
+  }
+  : never;
 
 type TwitchEventSubSubscriptionType = "stream.online";
+
+const notif: TwitchEventSubMessage<"session_reconnect"> = {
+  "metadata": {
+    "message_id": "84c1e79a-2a4b-4c13-ba0b-4312293e9308",
+    "message_type": "session_reconnect",
+    "message_timestamp": "2019-11-18T09:10:11.634234626Z",
+  },
+  "payload": {
+    "session": {
+      "id": "AQoQexAWVYKSTIu4ec_2VAxyuhAB",
+      "status": "reconnecting",
+      "keepalive_timeout_seconds": null,
+      "reconnect_url": "wss://eventsub-beta.wss.twitch.tv?...",
+      "connected_at": "2019-11-16T10:11:12.634234626Z",
+    },
+  },
+};
