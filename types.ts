@@ -99,7 +99,7 @@ interface TwitchStream {
   user_name: string;
   game_id: string;
   game_name: string;
-  type: string;
+  type: TwitchStreamType;
   title: string;
   viewer_count: number;
   started_at: string;
@@ -109,6 +109,13 @@ interface TwitchStream {
   tags: string[];
   is_mature: boolean;
 }
+
+type TwitchStreamType =
+  | "live"
+  | "playlist"
+  | "watch_party"
+  | "premiere"
+  | "rerun";
 
 export interface TwitchUserJson {
   data: TwitchUser[];
@@ -125,3 +132,106 @@ interface TwitchUser {
   offline_image_url: string;
   created_at: string;
 }
+
+interface TwitchEventSubBaseMetadata<M extends TwitchEventSubMessageType> {
+  message_id: string;
+  message_type: M;
+  message_timestamp: string;
+}
+
+export interface TwitchEventSubMessage<
+  M extends TwitchEventSubMessageType,
+  S extends TwitchEventSubSubscriptionType,
+> {
+  metadata: M extends (
+    | "notification"
+    | "revokation"
+  ) ? TwitchEventSubSubsciptionMetadata<M, S>
+    : TwitchEventSubBaseMetadata<M>;
+  payload: TwitchEventSubPayload<M, S>[M];
+}
+
+type TwitchEventSubMessageType =
+  | "session_welcome"
+  | "session_keepalive"
+  | "notification"
+  | "session_reconnect"
+  | "revocation";
+
+interface TwitchEventSubPayload<
+  M extends TwitchEventSubMessageType,
+  S extends TwitchEventSubSubscriptionType,
+> {
+  session_welcome: {
+    session: {
+      id: string;
+      status: "connected";
+      keepalive_timeout_seconds: number;
+      reconnect_url: null;
+      connected_at: string;
+    };
+  };
+  session_keepalive: Record<string, never>;
+  notification: {
+    subscription: TwitchEventSubSubsctiption<M, S>;
+    event: TwitchEventSubSubscriptionEvent[S];
+  };
+  session_reconnect: {
+    session: {
+      id: string;
+      status: "reconnecting";
+      keepalive_timeout_seconds: null;
+      reconnect_url: string;
+      connected_at: string;
+    };
+  };
+  revocation: {
+    subscription: TwitchEventSubSubsctiption<M, S>;
+  };
+}
+
+interface TwitchEventSubSubsctiption<
+  M extends TwitchEventSubMessageType,
+  S extends TwitchEventSubSubscriptionType,
+> {
+  "id": string;
+  status: M extends "revokation"
+    ? "authorization_revoked" | "user_removed" | "version_removed"
+    : "enabled";
+  type: S;
+  version: string;
+  cost: string;
+  condition: TwitchEventSubSubscriptionCondition[S];
+  transport: {
+    method: "websocket";
+    session_id: string;
+  };
+  created_at: string;
+}
+
+interface TwitchEventSubSubscriptionCondition {
+  "stream.online": {
+    broadcaster_user_id: string;
+  };
+}
+
+interface TwitchEventSubSubscriptionEvent {
+  "stream.online": {
+    id: string;
+    broadcaster_user_id: string;
+    broadcaster_user_login: string;
+    broadcaster_user_name: string;
+    type: TwitchStreamType;
+    started_at: string;
+  };
+}
+
+interface TwitchEventSubSubsciptionMetadata<
+  M extends TwitchEventSubMessageType,
+  S extends TwitchEventSubSubscriptionType,
+> extends TwitchEventSubBaseMetadata<M> {
+  subscription_type: S;
+  subscription_version: string;
+}
+
+type TwitchEventSubSubscriptionType = "stream.online";
