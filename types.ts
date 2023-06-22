@@ -92,7 +92,7 @@ export interface TwitchStreamJson {
   };
 }
 
-interface TwitchStream {
+export interface TwitchStream {
   id: string;
   user_id: string;
   user_login: string;
@@ -110,7 +110,7 @@ interface TwitchStream {
   is_mature: boolean;
 }
 
-type TwitchStreamType =
+export type TwitchStreamType =
   | "live"
   | "playlist"
   | "watch_party"
@@ -121,7 +121,7 @@ export interface TwitchUserJson {
   data: TwitchUser[];
 }
 
-interface TwitchUser {
+export interface TwitchUser {
   id: string;
   login: string;
   display_name: string;
@@ -133,7 +133,9 @@ interface TwitchUser {
   created_at: string;
 }
 
-interface TwitchEventSubBaseMetadata<M extends TwitchEventSubMessageType> {
+export interface TwitchEventSubBaseMetadata<
+  M extends TwitchEventSubMessageType,
+> {
   message_id: string;
   message_type: M;
   message_timestamp: string;
@@ -151,14 +153,14 @@ export interface TwitchEventSubMessage<
   payload: TwitchEventSubPayload<M, S>[M];
 }
 
-type TwitchEventSubMessageType =
+export type TwitchEventSubMessageType =
   | "session_welcome"
   | "session_keepalive"
   | "notification"
   | "session_reconnect"
   | "revocation";
 
-interface TwitchEventSubPayload<
+export interface TwitchEventSubPayload<
   M extends TwitchEventSubMessageType,
   S extends TwitchEventSubSubscriptionType | undefined = undefined,
 > {
@@ -194,7 +196,7 @@ interface TwitchEventSubPayload<
     : never;
 }
 
-interface TwitchEventSubSubsctiption<
+export interface TwitchEventSubSubsctiption<
   M extends TwitchEventSubMessageType,
   S extends TwitchEventSubSubscriptionType,
 > {
@@ -213,13 +215,13 @@ interface TwitchEventSubSubsctiption<
   created_at: string;
 }
 
-interface TwitchEventSubSubscriptionCondition {
+export interface TwitchEventSubSubscriptionCondition {
   "stream.online": {
     broadcaster_user_id: string;
   };
 }
 
-interface TwitchEventSubSubscriptionEvent {
+export interface TwitchEventSubSubscriptionEvent {
   "stream.online": {
     id: string;
     broadcaster_user_id: string;
@@ -230,7 +232,7 @@ interface TwitchEventSubSubscriptionEvent {
   };
 }
 
-type TwitchEventSubSubsciptionMetadata<
+export type TwitchEventSubSubsciptionMetadata<
   M extends TwitchEventSubMessageType,
   S extends TwitchEventSubSubscriptionType | undefined = undefined,
 > = S extends TwitchEventSubSubscriptionType ? TwitchEventSubBaseMetadata<M> & {
@@ -239,4 +241,4 @@ type TwitchEventSubSubsciptionMetadata<
   }
   : never;
 
-type TwitchEventSubSubscriptionType = "stream.online";
+export type TwitchEventSubSubscriptionType = "stream.online";
