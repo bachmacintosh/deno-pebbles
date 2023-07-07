@@ -75,14 +75,16 @@ export interface TwitchAccessTokenValidateJson {
 
 export interface TwitchAccessTokenGrantJson {
   access_token: string;
-  expires_in: number;
+  refresh_token: string;
+  scope: string[];
+  token_type: "bearer";
 }
 
 export interface TwitchConfigJson {
   clientId: string;
   clientSecret: string;
   accessToken: string;
-  tokenExpires: Date;
+  refreshToken: string;
 }
 
 export interface TwitchStreamJson {
@@ -240,5 +242,25 @@ export type TwitchEventSubSubsciptionMetadata<
     subscription_version: string;
   }
   : never;
+
+export type TwitchEventSubSubscriptionRequest<
+  S extends TwitchEventSubSubscriptionType,
+> = Omit<
+  TwitchEventSubSubsctiption<"notification", S>,
+  "id" | "status" | "cost" | "created_at"
+>;
+
+export type TwitchEventSubSubscriptionResponse<
+  S extends TwitchEventSubSubscriptionType,
+> = {
+  data: (TwitchEventSubSubsctiption<"notification", S> & {
+    transport: {
+      connected_at: string;
+    };
+  })[];
+  total: number;
+  total_cost: number;
+  max_total_cost: number;
+};
 
 export type TwitchEventSubSubscriptionType = "stream.online";
