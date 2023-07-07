@@ -130,6 +130,7 @@ export default class TwitchAPI {
 
   public async getExistingStream(user: string): Promise<string | false> {
     await this.checkAccessToken(true);
+    console.info("Checking if they're already live...");
     const url = `https://api.twitch.tv/helix/streams?user_id=${user}`;
     const dataSet = await this.#makeApiRequest<TwitchStreamJson>(url);
     if (dataSet.data.length > 0) {
@@ -145,8 +146,7 @@ export default class TwitchAPI {
     request: TwitchEventSubSubscriptionRequest<S>,
   ): Promise<TwitchEventSubSubscriptionResponse<S>> {
     await this.checkAccessToken();
-    // const url = "https://api.twitch.tv/helix/eventsub/subscriptions";
-    const url = "http://127.0.0.1:8080/eventsub/subscriptions";
+    const url = "https://api.twitch.tv/helix/eventsub/subscriptions";
     const subscriptions = await this.#makeApiRequest<
       TwitchEventSubSubscriptionResponse<S>
     >(
@@ -316,7 +316,6 @@ export default class TwitchAPI {
     if (typeof body !== "undefined") {
       headers.set("Content-Type", "application/json");
       init.body = JSON.stringify(body);
-      console.info(init.body);
     }
     init.method = method;
     init.headers = headers;

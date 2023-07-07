@@ -10,42 +10,45 @@ import { open } from "../../deps.ts";
 export default class TwitchEventSub {
   #api: TwitchAPI;
   #user: string;
+  #subscriptionId: string;
   #keepaliveTimeout: number;
   #keepaliveTimerId: number;
   #ws: WebSocket;
-  // #wsUrl = "wss://eventsub.wss.twitch.tv/ws";
-  #wsUrl = "ws://127.0.0.1:8080/ws";
+  #wsUrl = "wss://eventsub.wss.twitch.tv/ws";
   #messageIds: Map<string, Date>;
 
   public constructor(api: TwitchAPI, user: string) {
     this.#api = api;
     this.#user = user;
+    this.#subscriptionId = "";
     console.info("Connecting to Twitch EventSub...");
     this.#keepaliveTimeout = 0;
     this.#keepaliveTimerId = 0;
     this.#ws = new WebSocket(this.#wsUrl);
-    this.#ws.addEventListener("open", () => this.#onOpen());
-    this.#ws.addEventListener("message", (e) => this.#onMessage(e));
-    this.#ws.addEventListener("close", (e) => this.#onClose(e));
+    this.#ws.addEventListener("open", this.#onOpen);
+    this.#ws.addEventListener("message", this.#onMessage);
+    this.#ws.addEventListener("close", this.#onClose);
     this.#messageIds = new Map<string, Date>();
     const everyHour = 60 * 60 * 1000;
     Deno.unrefTimer(setInterval(this.#sweepOldMessages, everyHour));
   }
 
   #reconnect(url?: string) {
+    this.#ws.removeEventListener("close", this.#onClose);
+    this.#ws.close();
     const newWs = new WebSocket(url ?? this.#wsUrl);
-    newWs.addEventListener("open", () => this.#onOpen());
-    newWs.addEventListener("message", (e) => this.#onMessage(e));
-    newWs.addEventListener("close", (e) => this.#onClose(e));
+    newWs.addEventListener("open", this.#onOpen);
+    newWs.addEventListener("message", this.#onMessage);
+    newWs.addEventListener("close", this.#onClose);
     this.#ws = newWs;
     this.#messageIds.clear();
   }
 
-  #onOpen() {
+  #onOpen = () => {
     console.info("Successfully connected to EventSub.");
-  }
+  };
 
-  #onMessage(event: MessageEvent) {
+  #onMessage = (event: MessageEvent) => {
     const message = JSON.parse(event.data) as unknown;
     if (this.#isEventSubMessage(message, "session_welcome")) {
       this.#handleWelcomeMessage(message);
@@ -66,9 +69,9 @@ export default class TwitchEventSub {
       console.error(message);
       Deno.exit(1);
     }
-  }
+  };
 
-  #onClose(event: CloseEvent) {
+  #onClose = (event: CloseEvent) => {
     console.error("Twitch unexpectedly closed the connection.");
     switch (event.code) {
       case 4000:
@@ -99,31 +102,39 @@ export default class TwitchEventSub {
         console.error(`Unrecognized Close Code ${event.code ?? 0}`);
     }
     Deno.exit(1);
-  }
+  };
 
   async #handleWelcomeMessage(
     message: TwitchEventSubMessage<"session_welcome">,
   ) {
     if (this.#isNewMessage(message.metadata.message_id)) {
-      console.info("Received Welcome Message, subscribing...");
+      console.info("Received Welcome Message.");
       this.#keepaliveTimeout =
         (message.payload.session.keepalive_timeout_seconds * 1000) + 1000;
       this.#keepAlive();
-      const request: TwitchEventSubSubscriptionRequest<"stream.online"> = {
-        type: "stream.online",
-        version: "1",
-        condition: {
-          broadcaster_user_id: this.#user,
-        },
-        transport: {
-          method: "websocket",
-          session_id: message.payload.session.id,
-        },
-      };
-      await this.#api.createEventSubSubscription(request);
-      console.info(
-        "Success! We'll open the stream on Twitch when they go online.",
-      );
+      if (this.#subscriptionId === "") {
+        console.info("Subscribing to stream.online Event...");
+        const request: TwitchEventSubSubscriptionRequest<"stream.online"> = {
+          type: "stream.online",
+          version: "1",
+          condition: {
+            broadcaster_user_id: this.#user,
+          },
+          transport: {
+            method: "websocket",
+            session_id: message.payload.session.id,
+          },
+        };
+        const newSubscription = await this.#api.createEventSubSubscription(
+          request,
+        );
+        this.#subscriptionId = newSubscription.data[0].id;
+        console.info(
+          "Success! We'll open the stream on Twitch when they go online.",
+        );
+      } else {
+        console.info("Still listening for the stream to come online...");
+      }
     }
   }
 
