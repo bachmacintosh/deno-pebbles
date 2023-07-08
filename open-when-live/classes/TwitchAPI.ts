@@ -3,8 +3,8 @@ import {
   TwitchAccessTokenGrantJson,
   TwitchApiError,
   TwitchConfigJson,
+  TwitchEventSubCreatedSubscription,
   TwitchEventSubSubscriptionRequest,
-  TwitchEventSubSubscriptionResponse,
   TwitchEventSubSubscriptionType,
   TwitchStreamJson,
   TwitchUserJson,
@@ -144,11 +144,11 @@ export default class TwitchAPI {
     S extends TwitchEventSubSubscriptionType,
   >(
     request: TwitchEventSubSubscriptionRequest<S>,
-  ): Promise<TwitchEventSubSubscriptionResponse<S>> {
+  ): Promise<TwitchEventSubCreatedSubscription<S>> {
     await this.checkAccessToken();
     const url = "https://api.twitch.tv/helix/eventsub/subscriptions";
     const subscriptions = await this.#makeApiRequest<
-      TwitchEventSubSubscriptionResponse<S>
+      TwitchEventSubCreatedSubscription<S>
     >(
       url,
       "POST",
@@ -156,6 +156,8 @@ export default class TwitchAPI {
     );
     return subscriptions;
   }
+
+  public async getEventSubSubscriptions() {}
 
   async #redirectToTwitch() {
     const url = [

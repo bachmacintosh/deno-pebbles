@@ -250,7 +250,7 @@ export type TwitchEventSubSubscriptionRequest<
   "id" | "status" | "cost" | "created_at"
 >;
 
-export type TwitchEventSubSubscriptionResponse<
+export type TwitchEventSubCreatedSubscription<
   S extends TwitchEventSubSubscriptionType,
 > = {
   data: (TwitchEventSubSubsctiption<"notification", S> & {
@@ -261,6 +261,65 @@ export type TwitchEventSubSubscriptionResponse<
   total: number;
   total_cost: number;
   max_total_cost: number;
+};
+
+export type TwitchEventSubSubscriptionFullStatus =
+  | "enabled"
+  | "webhook_callback_verification_pending"
+  | "webhook_callback_verification_failed"
+  | "notification_failures_exceeded"
+  | "authorization_revoked"
+  | "moderator_removed"
+  | "user_removed"
+  | "version_removed"
+  | "websocket_disconnected"
+  | "websocket_failed_ping_pong"
+  | "websocket_received_inbound_traffic"
+  | "websocket_connection_unused"
+  | "websocket_internal_error"
+  | "websocket_network_timeout"
+  | "websocket_network_error";
+
+export type TwitchEventSubSubscriptionList<
+  S extends TwitchEventSubSubscriptionType | unknown = unknown,
+> = {
+  data: S extends TwitchEventSubSubscriptionType
+    ? (TwitchEventSubSubsctiption<"notification", S> & {
+      status: TwitchEventSubSubscriptionFullStatus;
+    } & { transport: TwitchEventSubSubscriptionTransport })[]
+    : TwitchEventSubUnknownSubscription[];
+  total: number;
+  total_cost: number;
+  max_total_cost: number;
+  pagination: {
+    cursor?: string;
+  };
+};
+
+export type TwitchEventSubSubscriptionTransport<
+  T extends "webhook" | "websocket" = "websocket",
+> =
+  & {
+    method: T;
+  }
+  & (T extends "webhook" ? {
+      callback: string;
+    }
+    : {
+      session_id: string;
+      connected_at: string;
+      disconnected_at: string;
+    });
+
+export type TwitchEventSubUnknownSubscription = {
+  id: string;
+  status: TwitchEventSubSubscriptionFullStatus;
+  type: string;
+  version: string;
+  cost: string;
+  condition: Record<string, unknown>;
+  transport: TwitchEventSubSubscriptionTransport;
+  created_at: string;
 };
 
 export type TwitchEventSubSubscriptionType = "stream.online";
