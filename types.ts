@@ -202,7 +202,7 @@ export interface TwitchEventSubSubsctiption<
   M extends TwitchEventSubMessageType,
   S extends TwitchEventSubSubscriptionType,
 > {
-  "id": string;
+  id: string;
   status: M extends "revocation"
     ? "authorization_revoked" | "user_removed" | "version_removed"
     : "enabled";
@@ -250,6 +250,24 @@ export type TwitchEventSubSubscriptionRequest<
   "id" | "status" | "cost" | "created_at"
 >;
 
+export type TwitchEventSubSubscriptionListRequest<
+  S extends TwitchEventSubSubscriptionType | undefined,
+> =
+  | {
+    status: TwitchEventSubSubscriptionFullStatus;
+    type?: never;
+    user_id?: never;
+    after?: never;
+  }
+  | {
+    status?: never;
+    type: S extends TwitchEventSubSubscriptionType ? S : never;
+    user_id?: never;
+    after?: never;
+  }
+  | { status?: never; type?: never; user_id: string; after?: never }
+  | { status?: never; type?: never; user_id?: never; after: string };
+
 export type TwitchEventSubCreatedSubscription<
   S extends TwitchEventSubSubscriptionType,
 > = {
@@ -281,7 +299,7 @@ export type TwitchEventSubSubscriptionFullStatus =
   | "websocket_network_error";
 
 export type TwitchEventSubSubscriptionList<
-  S extends TwitchEventSubSubscriptionType | unknown = unknown,
+  S extends TwitchEventSubSubscriptionType | undefined = undefined,
 > = {
   data: S extends TwitchEventSubSubscriptionType
     ? (TwitchEventSubSubsctiption<"notification", S> & {

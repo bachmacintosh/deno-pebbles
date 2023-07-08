@@ -4,6 +4,8 @@ import {
   TwitchApiError,
   TwitchConfigJson,
   TwitchEventSubCreatedSubscription,
+  TwitchEventSubSubscriptionList,
+  TwitchEventSubSubscriptionListRequest,
   TwitchEventSubSubscriptionRequest,
   TwitchEventSubSubscriptionType,
   TwitchStreamJson,
@@ -157,7 +159,35 @@ export default class TwitchAPI {
     return subscriptions;
   }
 
-  public async getEventSubSubscriptions() {}
+  public async deleteEventSubSubscription(id: string) {
+    await this.checkAccessToken();
+    const url = `https://api.twitch.tv/helix/eventsub/subscriptions?id=${id}`;
+    await this.#makeApiRequest(url, "DELETE");
+  }
+
+  public async getEventSubSubscriptions<
+    S extends TwitchEventSubSubscriptionType | undefined = undefined,
+  >(
+    filter?: TwitchEventSubSubscriptionListRequest<S>,
+  ): Promise<TwitchEventSubSubscriptionList<S>> {
+    await this.checkAccessToken();
+    let url = "https://api.twitch.tv/helix/eventsub/subscriptions";
+    if (typeof filter !== "undefined") {
+      if (typeof filter.after !== "undefined") {
+        url += `?after=${filter.after}`;
+      } else if (typeof filter.status !== "undefined") {
+        url += `?status=${filter.status}`;
+      } else if (typeof filter.type !== "undefined") {
+        url += `?type=${filter.type}`;
+      } else if (typeof filter.user_id !== "undefined") {
+        url += `?user_id=${filter.user_id}`;
+      }
+    }
+    const subscriptions = await this.#makeApiRequest<
+      TwitchEventSubSubscriptionList<S>
+    >(url);
+    return subscriptions;
+  }
 
   async #redirectToTwitch() {
     const url = [
@@ -305,9 +335,11 @@ export default class TwitchAPI {
     }
   }
 
-  async #makeApiRequest<T>(
+  async #makeApiRequest<
+    T,
+  >(
     url: string,
-    method: "GET" | "POST" | "PUT" = "GET",
+    method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
     body?: unknown,
   ): Promise<T> {
     const headers = new Headers({
@@ -322,7 +354,10 @@ export default class TwitchAPI {
     init.method = method;
     init.headers = headers;
     const response = await fetch(url, init);
-    if (response.ok) {
+    if (response.status === 204) {
+      // TODO: Find a better way to return on an empty body
+      return {} as T;
+    } else if (response.ok) {
       const json = await response.json() as T;
       return json;
     } else {
