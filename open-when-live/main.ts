@@ -16,7 +16,7 @@ const showHelp = () => {
     read: "./",
     write: "./.twitch.json",
     run: "open (Mac), cmd (Windows), xdg-open (Linux)",
-    net: "0.0.0.0:3000, id.twitch.tv, api.twitch.tv, eventsub.wss.twitch.tv",
+    net: "0.0.0.0:8000, id.twitch.tv, api.twitch.tv, eventsub.wss.twitch.tv",
   };
   console.info(`open-when-live v${VERSION}`);
   console.info(
@@ -30,6 +30,7 @@ const showHelp = () => {
 const args = Deno.args;
 
 if (
+  args.length === 0 || !args[0] ||
   args[0] === "--help" || args[0] === "-h" ||
   args[0] === "--h"
 ) {
@@ -211,33 +212,42 @@ if (connectToTwitchEventSubPermission.state === "prompt") {
   }
 }
 
-const CONFIG_FILE_PATH = join(Deno.cwd(), ".twitch.json");
+console.info(
+  "This program may open your browser to log into Twitch and/or open a Twitch\nstream.",
+);
+const weAreGo = confirm(
+  "Is that OK?",
+);
 
-const api = new TwitchAPI(CONFIG_FILE_PATH);
+if (weAreGo) {
+  const CONFIG_FILE_PATH = join(Deno.cwd(), ".twitch.json");
 
-let user: string | number = "";
-const userString = Deno.args[0];
-const userNumber = Number.parseInt(userString, 10);
-if (!Number.isNaN(userNumber)) {
-  user = userNumber;
-} else {
-  user = userString;
-}
+  const api = new TwitchAPI(CONFIG_FILE_PATH);
 
-const validUser = await api.validateTwitchUser(user);
+  let user: string | number = "";
+  const userString = Deno.args[0];
+  const userNumber = Number.parseInt(userString, 10);
+  if (!Number.isNaN(userNumber)) {
+    user = userNumber;
+  } else {
+    user = userString;
+  }
 
-if (!validUser) {
-  console.error(
-    `Twitch says the user name/ID ${userString} is invalid. Check spelling and try again.`,
-  );
-  Deno.exit(1);
-}
+  const validUser = await api.validateTwitchUser(user);
 
-const existingStream = await api.getExistingStream(validUser);
+  if (!validUser) {
+    console.error(
+      `Twitch says the user name/ID ${userString} is invalid. Check spelling and try again.`,
+    );
+    Deno.exit(1);
+  }
 
-if (typeof existingStream === "string") {
-  console.info("Stream is already live, opening...");
-  await open(existingStream);
-} else {
-  const _es = new TwitchEventSub(api, validUser);
+  const existingStream = await api.getExistingStream(validUser);
+
+  if (typeof existingStream === "string") {
+    console.info("Stream is already live, opening...");
+    await open(existingStream);
+  } else {
+    const _es = new TwitchEventSub(api, validUser);
+  }
 }
