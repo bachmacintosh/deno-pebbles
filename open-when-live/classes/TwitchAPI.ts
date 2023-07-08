@@ -124,6 +124,7 @@ export default class TwitchAPI {
     }
     const userSet = await this.#makeApiRequest<TwitchUserJson>(url);
     if (userSet.data.length > 0) {
+      console.info(`Found Twitch User: ${userSet.data[0].display_name}`);
       return userSet.data[0].id;
     } else {
       return false;

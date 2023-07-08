@@ -230,7 +230,7 @@ if (weAreGo) {
   if (!Number.isNaN(userNumber)) {
     user = userNumber;
   } else {
-    user = userString;
+    user = userString.toLowerCase();
   }
 
   const validUser = await api.validateTwitchUser(user);
