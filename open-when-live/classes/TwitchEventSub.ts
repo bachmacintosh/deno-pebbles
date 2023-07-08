@@ -195,7 +195,7 @@ export default class TwitchEventSub {
       this.#keepaliveTimerId = setTimeout(
         () => {
           console.info("Twitch connection lost, reconnecting...");
-          this.#reconnect;
+          this.#reconnect();
         },
         this.#keepaliveTimeout,
       );
