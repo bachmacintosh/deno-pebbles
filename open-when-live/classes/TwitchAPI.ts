@@ -80,6 +80,7 @@ export default class TwitchAPI {
       this.#config.accessToken = tokens.access_token;
       this.#config.refreshToken = tokens.refresh_token;
       console.info("Successfully logged in.");
+      this.#saveConfigFile();
     } else {
       const isValidToken = await this.#isValidAccessToken();
       if (!isValidToken) {
@@ -94,16 +95,18 @@ export default class TwitchAPI {
           this.#config.accessToken = tokens.access_token;
           this.#config.refreshToken = tokens.refresh_token;
           console.info("Successfully logged in.");
+          this.#saveConfigFile();
         } else {
           this.#config.accessToken = refreshedTokens.access_token;
           this.#config.refreshToken = refreshedTokens.refresh_token;
           console.info("Successfully refreshed the token. Continuing...");
+          this.#saveConfigFile();
         }
       }
     }
   }
 
-  public async saveConfigFile() {
+  async #saveConfigFile() {
     console.info("Updating Config file...");
     await Deno.writeTextFile(
       this.#configPath,
