@@ -248,7 +248,7 @@ if (weAreGo) {
   if (canCaffeinate) {
     console.info("Spawning Caffeinate Sub-Process...");
     const caffeinate = new Deno.Command("caffeinate", {
-      args: ["-dims"],
+      args: ["-dims", `-w ${Deno.pid}`],
     });
     const caffeinateChildProcess = caffeinate.spawn();
     console.info(`Caffeinate Process ID: ${caffeinateChildProcess.pid}`);
