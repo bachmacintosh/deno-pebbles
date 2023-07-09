@@ -67,7 +67,7 @@ export default class TwitchEventSub {
     } else {
       console.error("Unknown WebSocket Message.");
       console.error(message);
-      Deno.exit(1);
+      this.#ws.close();
     }
   };
 
@@ -101,7 +101,6 @@ export default class TwitchEventSub {
       default:
         console.error(`Unrecognized Close Code ${event.code ?? 0}`);
     }
-    Deno.exit(1);
   };
 
   async #handleWelcomeMessage(
@@ -173,7 +172,6 @@ export default class TwitchEventSub {
           );
       }
       this.#ws.close();
-      Deno.exit(1);
     }
   }
 
@@ -186,7 +184,6 @@ export default class TwitchEventSub {
     await open(url);
     console.info("Cleaning up EventSub and exiting app...");
     this.#ws.close();
-    Deno.exit();
   }
 
   #keepAlive() {
