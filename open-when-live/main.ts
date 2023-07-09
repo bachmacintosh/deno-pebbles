@@ -245,15 +245,6 @@ const weAreGo = confirm(
 );
 
 if (weAreGo) {
-  if (canCaffeinate) {
-    console.info("Spawning Caffeinate Sub-Process...");
-    const caffeinate = new Deno.Command("caffeinate", {
-      args: ["-dims", `-w ${Deno.pid}`],
-    });
-    const caffeinateChildProcess = caffeinate.spawn();
-    console.info(`Caffeinate Process ID: ${caffeinateChildProcess.pid}`);
-  }
-
   const CONFIG_FILE_PATH = join(Deno.cwd(), ".twitch.json");
 
   const api = new TwitchAPI(CONFIG_FILE_PATH);
@@ -282,6 +273,14 @@ if (weAreGo) {
     console.info("Stream is already live, opening...");
     await open(existingStream);
   } else {
+    if (canCaffeinate) {
+      console.info("Spawning Caffeinate Sub-Process...");
+      const caffeinate = new Deno.Command("caffeinate", {
+        args: ["-dims", `-w ${Deno.pid}`],
+      });
+      const caffeinateChildProcess = caffeinate.spawn();
+      console.info(`Caffeinate Process ID: ${caffeinateChildProcess.pid}`);
+    }
     const _es = new TwitchEventSub(api, validUser);
   }
 }
