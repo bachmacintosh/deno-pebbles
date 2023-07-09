@@ -28,6 +28,7 @@ const showHelp = () => {
 };
 
 const args = Deno.args;
+let canCaffeinate = false;
 
 if (
   args.length === 0 || !args[0] ||
@@ -91,6 +92,28 @@ if (os === "darwin") {
       );
       Deno.exit(1);
     }
+  }
+  const caffeinateProcess = {
+    name: "run",
+    command: "caffeinate",
+  } as const;
+  const caffeinateProcessPermission = await Deno.permissions.query(
+    caffeinateProcess,
+  );
+  if (caffeinateProcessPermission.state === "prompt") {
+    console.info(
+      "[optional] We can keep your Mac from sleeping if you allow us to use Apple's built in 'caffeinate' command.",
+    );
+    const result = await Deno.permissions.request(caffeinateProcess);
+    if (result.state === "granted") {
+      canCaffeinate = true;
+    } else {
+      console.info(
+        "That's okay. Just bear in mind that your Mac may fall asleep after some time.",
+      );
+    }
+  } else if (caffeinateProcessPermission.state === "granted") {
+    canCaffeinate = true;
   }
 } else if (os === "windows") {
   const openBrowserWindows = {
@@ -212,6 +235,8 @@ if (connectToTwitchEventSubPermission.state === "prompt") {
   }
 }
 
+console.info("---");
+
 console.info(
   "This program may open your browser to log into Twitch and/or open a Twitch\nstream.",
 );
@@ -220,6 +245,15 @@ const weAreGo = confirm(
 );
 
 if (weAreGo) {
+  if (canCaffeinate) {
+    console.info("Spawning Caffeinate Sub-Process...");
+    const caffeinate = new Deno.Command("caffeinate", {
+      args: ["-dims"],
+    });
+    const caffeinateChildProcess = caffeinate.spawn();
+    console.info(`Caffeinate Process ID: ${caffeinateChildProcess.pid}`);
+  }
+
   const CONFIG_FILE_PATH = join(Deno.cwd(), ".twitch.json");
 
   const api = new TwitchAPI(CONFIG_FILE_PATH);
