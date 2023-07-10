@@ -279,8 +279,12 @@ if (weAreGo) {
         args: ["-dims", `-w ${Deno.pid}`],
       });
       const caffeinateChildProcess = caffeinate.spawn();
-      console.info(`Caffeinate Process ID: ${caffeinateChildProcess.pid}`);
+      console.info(`Caffeinate Sub-Process ID: ${caffeinateChildProcess.pid}`);
+      const _es = new TwitchEventSub(api, validUser);
+      console.info("Terminating Caffeinate Sub-Process...");
+      caffeinateChildProcess.kill("SIGTERM");
+    } else {
+      const _es = new TwitchEventSub(api, validUser);
     }
-    const _es = new TwitchEventSub(api, validUser);
   }
 }
