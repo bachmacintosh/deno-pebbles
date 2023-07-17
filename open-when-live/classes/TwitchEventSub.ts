@@ -33,7 +33,7 @@ export default class TwitchEventSub {
     Deno.unrefTimer(setInterval(this.#sweepOldMessages, everyHour));
   }
 
-  #reconnect(url?: string) {
+  #reconnect(url?: string): void {
     this.#ws.removeEventListener("close", this.#onClose);
     this.#ws.close();
     const newWs = new WebSocket(url ?? this.#wsUrl);
@@ -105,11 +105,10 @@ export default class TwitchEventSub {
 
   async #handleWelcomeMessage(
     message: TwitchEventSubMessage<"session_welcome">,
-  ) {
+  ): Promise<void> {
     if (this.#isNewMessage(message.metadata.message_id)) {
       console.info("Received Welcome Message.");
-      this.#keepaliveTimeout =
-        (message.payload.session.keepalive_timeout_seconds * 1000) + 1000;
+      this.#keepaliveTimeout = (message.payload.session.keepalive_timeout_seconds * 1000) + 1000;
       this.#keepAlive();
       if (this.#subscriptionId === "") {
         console.info("Subscribing to stream.online Event...");
@@ -137,13 +136,13 @@ export default class TwitchEventSub {
     }
   }
 
-  #handleKeepaliveMessage(message: TwitchEventSubMessage<"session_keepalive">) {
+  #handleKeepaliveMessage(message: TwitchEventSubMessage<"session_keepalive">): void {
     if (this.#isNewMessage(message.metadata.message_id)) {
       this.#keepAlive();
     }
   }
 
-  #handleReconnectMessage(message: TwitchEventSubMessage<"session_reconnect">) {
+  #handleReconnectMessage(message: TwitchEventSubMessage<"session_reconnect">): void {
     if (this.#isNewMessage(message.metadata.message_id)) {
       this.#keepAlive();
       console.info("Twitch wants us to Reconnect...");
@@ -153,7 +152,7 @@ export default class TwitchEventSub {
 
   #handleRevocationMessage(
     message: TwitchEventSubMessage<"revocation", "stream.online">,
-  ) {
+  ): void {
     if (this.#isNewMessage(message.metadata.message_id)) {
       this.#keepAlive();
       console.error("EventSub subscription was revoked.");
@@ -177,16 +176,15 @@ export default class TwitchEventSub {
 
   async #handleStreamOnline(
     message: TwitchEventSubMessage<"notification", "stream.online">,
-  ) {
+  ): Promise<void> {
     console.info(`Stream is Live! Opening...`);
-    const url =
-      `https://twitch.tv/${message.payload.event.broadcaster_user_login}`;
+    const url = `https://twitch.tv/${message.payload.event.broadcaster_user_login}`;
     await open(url);
     console.info("Cleaning up EventSub and exiting app...");
     this.#ws.close();
   }
 
-  #keepAlive() {
+  #keepAlive(): void {
     if (this.#keepaliveTimerId !== 0) {
       clearTimeout(this.#keepaliveTimerId);
       this.#keepaliveTimerId = setTimeout(
@@ -209,7 +207,7 @@ export default class TwitchEventSub {
     }
   }
 
-  #sweepOldMessages() {
+  #sweepOldMessages(): void {
     const oneHour = 3600 * 60;
     const oneHourAgo = Date.now() - oneHour;
     for (const [id, date] of this.#messageIds) {

@@ -59,11 +59,11 @@ export default class TwitchAPI {
     this.#state = crypto.randomUUID();
   }
 
-  public resetState() {
+  public resetState(): void {
     this.#state = crypto.randomUUID();
   }
 
-  public async checkAccessToken(loginAgain = false) {
+  public async checkAccessToken(loginAgain = false): Promise<void> {
     const throwifNotLoggingIn = () => {
       if (!loginAgain) {
         throw new Error(
@@ -106,7 +106,7 @@ export default class TwitchAPI {
     }
   }
 
-  async #saveConfigFile() {
+  async #saveConfigFile(): Promise<void> {
     console.info("Updating Config file...");
     await Deno.writeTextFile(
       this.#configPath,
@@ -157,16 +157,16 @@ export default class TwitchAPI {
       TwitchEventSubCreatedSubscription<S>
     >(
       url,
-      "POST",
       request,
+      "POST",
     );
     return subscriptions;
   }
 
-  public async deleteEventSubSubscription(id: string) {
+  public async deleteEventSubSubscription(id: string): Promise<void> {
     await this.checkAccessToken();
     const url = `https://api.twitch.tv/helix/eventsub/subscriptions?id=${id}`;
-    await this.#makeApiRequest(url, "DELETE");
+    await this.#makeApiRequest(url, null, "DELETE");
   }
 
   public async getEventSubSubscriptions<
@@ -193,7 +193,7 @@ export default class TwitchAPI {
     return subscriptions;
   }
 
-  async #redirectToTwitch() {
+  async #redirectToTwitch(): Promise<void> {
     const url = [
       this.#oauthUrl,
       `?client_id=${this.#config.clientId}`,
@@ -343,8 +343,8 @@ export default class TwitchAPI {
     T,
   >(
     url: string,
-    method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
     body?: unknown,
+    method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
   ): Promise<T> {
     const headers = new Headers({
       Authorization: `Bearer ${this.#config.accessToken}`,
@@ -359,7 +359,7 @@ export default class TwitchAPI {
     init.headers = headers;
     const response = await fetch(url, init);
     if (response.status === 204) {
-      // TODO: Find a better way to return on an empty body
+      // TODO(@bachmacintosh): Find a better way to return on an empty body
       return {} as T;
     } else if (response.ok) {
       const json = await response.json() as T;
