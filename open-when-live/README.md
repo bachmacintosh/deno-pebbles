@@ -1,12 +1,10 @@
 # open-when-live
 
-This program will open a Twitch Stream in your default browser if and when they
-go live.
+This program will open a Twitch Stream in your default browser if and when they go live.
 
 ## Usage
 
-If you haven't done so already,
-[create an app in the Twitch Developers Console](https://dev.twitch.tv/console/apps).
+If you haven't done so already, [create an app in the Twitch Developers Console](https://dev.twitch.tv/console/apps).
 Save the Client ID and Client Secret (which will not be shown again).
 
 From the root of this project, run:
@@ -15,13 +13,11 @@ From the root of this project, run:
 deno task open-when-live <twitch-streamer-login-or-id>
 ```
 
-After the first run, a `.twitch.json` file will be created in the project root.
-Update it with your Twitch App's client ID and secret. The `accessToken`will be
-updated automatically the next time the program runs.
+After the first run, a `.twitch.json` file will be created in the project root. Update it with your Twitch App's client
+ID and secret. The `accessToken`will be updated automatically the next time the program runs.
 
-You will need to authorize your Twitch App against your account. Once that's
-done, we'll be able to connect to Twitch's EventSub API, and open the stream in
-your browser as soon as it goes live.
+You will need to authorize your Twitch App against your account. Once that's done, we'll be able to connect to Twitch's
+EventSub API, and open the stream in your browser as soon as it goes live.
 
 ## Permissions
 

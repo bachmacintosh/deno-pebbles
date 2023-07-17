@@ -203,8 +203,7 @@ export interface TwitchEventSubSubsctiption<
   S extends TwitchEventSubSubscriptionType,
 > {
   id: string;
-  status: M extends "revocation"
-    ? "authorization_revoked" | "user_removed" | "version_removed"
+  status: M extends "revocation" ? "authorization_revoked" | "user_removed" | "version_removed"
     : "enabled";
   type: S;
   version: string;
@@ -301,8 +300,7 @@ export type TwitchEventSubSubscriptionFullStatus =
 export type TwitchEventSubSubscriptionList<
   S extends TwitchEventSubSubscriptionType | undefined = undefined,
 > = {
-  data: S extends TwitchEventSubSubscriptionType
-    ? (TwitchEventSubSubsctiption<"notification", S> & {
+  data: S extends TwitchEventSubSubscriptionType ? (TwitchEventSubSubsctiption<"notification", S> & {
       status: TwitchEventSubSubscriptionFullStatus;
     } & { transport: TwitchEventSubSubscriptionTransport })[]
     : TwitchEventSubUnknownSubscription[];
