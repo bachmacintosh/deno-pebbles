@@ -15,7 +15,7 @@ const showHelp = () => {
   const permissions = {
     read: "./",
     write: "./.twitch.json",
-    run: "open (Mac), cmd (Windows), xdg-open (Linux)",
+    run: "open / caffeinate (Mac), cmd (Windows), xdg-open (Linux)",
     net: "0.0.0.0:8000, id.twitch.tv, api.twitch.tv, eventsub.wss.twitch.tv",
   };
   console.info(`open-when-live v${VERSION}`);
